@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="messagethriftserviceapi" />
+        <module name="useredgeservice" />
         <module name="userthriftservice" />
         <module name="userthriftserviceapi" />
       </profile>
@@ -14,6 +15,7 @@
     <bytecodeTargetLevel>
       <module name="messagethriftserviceapi" target="8" />
       <module name="microservice" target="1.5" />
+      <module name="useredgeservice" target="8" />
       <module name="userthriftservice" target="8" />
       <module name="userthriftserviceapi" target="8" />
     </bytecodeTargetLevel>
