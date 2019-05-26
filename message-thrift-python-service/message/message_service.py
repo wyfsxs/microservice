@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from message.api import MessageService
 from thrift.transport import TSocket
 from thrift.transport import TTransport
@@ -18,7 +20,7 @@ class MessageServiceHandler:
 
     def sendEmailMessage(self, email, message):
         print("sendEmailMessage, email:" + email + ", message:" + message)
-        messageObj = MIMEText(message, "planin", "uft-8")
+        messageObj = MIMEText(message, "plain", "utf-8")
         messageObj['From'] = send
         messageObj['To'] = email
         messageObj['Subject'] = Header('慕课网邮件', 'utf-8')
@@ -35,12 +37,13 @@ class MessageServiceHandler:
 
 
 if __name__ == '__main__':
-    handle = MessageServiceHandler()
-    processor = MessageService.Processor(handle)
-    transport = TSocket.TServerSocket("localhost", "9090")
+    handler = MessageServiceHandler()
+    processor = MessageService.Processor(handler)
+    transport = TSocket.TServerSocket("192.168.1.4", "9090")
     tfactory = TTransport.TFramedTransportFactory()
-    pfactory = TBinaryProtocol.TBinaryProtocolFactory
+    pfactory = TBinaryProtocol.TBinaryProtocolFactory()
+
     server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
-    print("python thrift server start")
+    print ("python thrift server start")
     server.serve()
-    print("python thrift server exit")
+    print ("python thrift server exit")

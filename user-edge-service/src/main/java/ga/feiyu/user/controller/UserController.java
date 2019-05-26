@@ -7,6 +7,7 @@ import ga.feiyu.user.dto.UserDTO;
 import ga.feiyu.user.response.LoginResponse;
 import ga.feiyu.user.response.Response;
 import ga.feiyu.user.thrift.ServiceProvider;
+import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
@@ -52,9 +53,79 @@ public class UserController {
         return new LoginResponse(token);
     }
 
+    //注册用户
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Response register(@RequestParam("username") String username,
+                             @RequestParam("password") String password,
+                             @RequestParam(value = "mobile", required = false) String mobile,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam("verifyCode") String verifyCode) {
+        if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
+            return Response.MOBILE_OR_EMAIL_REQUIRED;
+        }
+
+        if (StringUtils.isNotBlank(mobile)) {
+            String redisCode = redisClient.get(mobile).toString();
+            if (!verifyCode.equals(redisCode)) {
+                return Response.VERIFY_CODE_INVALID;
+            }
+        }
+
+        if (StringUtils.isNotBlank(email)) {
+            String redisCode = redisClient.get(email).toString();
+            if (!verifyCode.equals(redisCode)) {
+                return Response.VERIFY_CODE_INVALID;
+            }
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(username);
+        userInfo.setPassword(md5(password));
+        userInfo.setEmail(email);
+        userInfo.setMobile(mobile);
+        try {
+            serviceProvider.getUserService().regiserUser(userInfo);
+        } catch (TException e) {
+            e.printStackTrace();
+            return Response.exception(e);
+        }
+        return Response.SUCCESS;
+
+    }
+
+    //发送验证码
+    @RequestMapping(value = "/sendVerifyCode", method = RequestMethod.POST)
+    @ResponseBody
+    public Response sendVerifyCode(@RequestParam(value = "mobile", required = false) String mobile,
+                                   @RequestParam(value = "email", required = false) String email) {
+        String message = "Verify code is:";
+        String code = randomCode("0123456789", 6);
+        try {
+            boolean result = false;
+            if (StringUtils.isNotBlank(mobile)) {
+                result = serviceProvider.getMessageService().sendMobileMessage(mobile, message + code);
+                redisClient.set(mobile, code);
+            } else if (StringUtils.isNotBlank(email)) {
+                result = serviceProvider.getMessageService().sendEmailMessage(email, message + code);
+                redisClient.set(email, code);
+            } else {
+                return Response.MOBILE_OR_EMAIL_REQUIRED;
+            }
+            if (!result) {
+                return Response.SEND_VERIFY_CODE;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.exception(e);
+        } finally {
+            //必须关闭Transport，不关闭远程调用时会出问题
+            serviceProvider.closeTransport();
+        }
+        return Response.SUCCESS;
+    }
+
     private Object toDTO(UserInfo userInfo) {
         UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(userDTO, userInfo);
+        BeanUtils.copyProperties(userInfo, userDTO);
         return userDTO;
     }
 
