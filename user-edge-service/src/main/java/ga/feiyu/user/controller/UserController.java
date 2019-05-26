@@ -1,9 +1,9 @@
 package ga.feiyu.user.controller;
 
 
+import ga.feiyu.thrift.dto.UserDTO;
 import ga.feiyu.thrift.user.UserInfo;
 import ga.feiyu.user.Redis.RedisClient;
-import ga.feiyu.user.dto.UserDTO;
 import ga.feiyu.user.response.LoginResponse;
 import ga.feiyu.user.response.Response;
 import ga.feiyu.user.thrift.ServiceProvider;
@@ -12,18 +12,25 @@ import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.MessageDigest;
 import java.util.Random;
 
-@RestController
+@Controller
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
     ServiceProvider serviceProvider;
     @Autowired
     RedisClient redisClient;
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -55,6 +62,7 @@ public class UserController {
 
     //注册用户
     @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
     public Response register(@RequestParam("username") String username,
                              @RequestParam("password") String password,
                              @RequestParam(value = "mobile", required = false) String mobile,
@@ -121,6 +129,12 @@ public class UserController {
             serviceProvider.closeTransport();
         }
         return Response.SUCCESS;
+    }
+
+    @RequestMapping(value = "/authentication", method = RequestMethod.POST)
+    @ResponseBody
+    public UserDTO authentication(@RequestParam("token") String token) {
+        return redisClient.get(token);
     }
 
     private Object toDTO(UserInfo userInfo) {

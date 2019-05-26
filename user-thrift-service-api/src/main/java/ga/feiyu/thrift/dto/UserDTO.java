@@ -1,4 +1,4 @@
-package ga.feiyu.user.dto;
+package ga.feiyu.thrift.dto;
 
 import java.io.Serializable;
 
