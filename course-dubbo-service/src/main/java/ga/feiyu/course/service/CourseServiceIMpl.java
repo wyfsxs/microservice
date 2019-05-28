@@ -1,11 +1,10 @@
 package ga.feiyu.course.service;
-
 import ga.feiyu.course.mapper.CourseMapper;
-import ga.feiyu.course.service.ICourseService;
 import ga.feiyu.course.service.dto.CourseDTO;
 import ga.feiyu.thrift.dto.TeacherDTO;
 import ga.feiyu.thrift.user.UserInfo;
 import org.apache.thrift.TException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +23,12 @@ public class CourseServiceIMpl implements ICourseService {
     public List<CourseDTO> courseList() {
         List<CourseDTO> courseDTOS = courseMapper.listCourse();
         if (courseDTOS != null) {
-            for (CourseDTO courseDTO: courseDTOS){
+            for (CourseDTO courseDTO : courseDTOS) {
                 Integer teacherID = courseMapper.getCourseTeacher(courseDTO.getId());
-                if (teacherID != null){
+                if (teacherID != null) {
                     try {
                         UserInfo userInfo = serviceProvider.getUserService().getTeacherById(teacherID);
-                       courseDTO.setTeacher(trans2Teacher(userInfo));
+                        courseDTO.setTeacher(trans2Teacher(userInfo));
                     } catch (TException e) {
                         e.printStackTrace();
                     }
@@ -40,6 +39,8 @@ public class CourseServiceIMpl implements ICourseService {
     }
 
     private TeacherDTO trans2Teacher(UserInfo userInfo) {
-        return null;
+        TeacherDTO teacherDTO = new TeacherDTO();
+        BeanUtils.copyProperties(userInfo, teacherDTO);
+        return teacherDTO;
     }
 }

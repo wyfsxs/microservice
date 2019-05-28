@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="course-dubbo-service" />
         <module name="course-dubbo-service-api" />
+        <module name="course-edge-service" />
         <module name="messagethriftserviceapi" />
         <module name="useredgeserverclient" />
         <module name="useredgeservice" />
@@ -18,6 +19,7 @@
     <bytecodeTargetLevel>
       <module name="course-dubbo-service" target="8" />
       <module name="course-dubbo-service-api" target="8" />
+      <module name="course-edge-service" target="8" />
       <module name="messagethriftserviceapi" target="8" />
       <module name="microservice" target="1.5" />
       <module name="useredgeserverclient" target="1.5" />
