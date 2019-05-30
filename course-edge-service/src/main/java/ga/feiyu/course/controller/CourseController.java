@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Controller(value = "/course")
+@Controller
+@RequestMapping(value = "/course")
 public class CourseController {
 
 

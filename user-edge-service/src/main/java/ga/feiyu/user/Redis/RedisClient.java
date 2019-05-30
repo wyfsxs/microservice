@@ -21,7 +21,7 @@ public class RedisClient {
     }
 
     public void set(String key, Object value, int timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout);
+        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
 
     public void expire(String key, int timeout) {

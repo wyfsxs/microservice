@@ -134,7 +134,8 @@ public class UserController {
     @RequestMapping(value = "/authentication", method = RequestMethod.POST)
     @ResponseBody
     public UserDTO authentication(@RequestParam("token") String token) {
-        return redisClient.get(token);
+        UserDTO userDTO = (UserDTO) redisClient.get(token);
+        return userDTO;
     }
 
     private Object toDTO(UserInfo userInfo) {

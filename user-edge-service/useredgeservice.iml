@@ -79,5 +79,6 @@
     <orderEntry type="module" module-name="messagethriftserviceapi" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="module" module-name="userthriftserviceapi" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.58" level="project" />
   </component>
 </module>
