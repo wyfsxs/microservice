@@ -6,9 +6,12 @@ import ga.feiyu.thrift.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.*;
@@ -17,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class LoginFilter implements Filter {
@@ -78,6 +83,12 @@ public abstract class LoginFilter implements Filter {
         post.addHeader("token", token);
         InputStream inputStream = null;
         try {
+            //必须封装post请求方法
+            List<NameValuePair> list = new ArrayList<NameValuePair>();
+            BasicNameValuePair basicNameValuePair = new BasicNameValuePair("token", token);
+            list.add(basicNameValuePair);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list);
+            post.setEntity(formEntity);
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new RuntimeException("request user info failed! StatusLne:" + response.getStatusLine());
