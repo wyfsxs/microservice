@@ -1,10 +1,10 @@
 package ga.feiyu.course.controller;
 
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import ga.feiyu.course.service.ICourseService;
 import ga.feiyu.course.service.dto.CourseDTO;
 import ga.feiyu.thrift.dto.UserDTO;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

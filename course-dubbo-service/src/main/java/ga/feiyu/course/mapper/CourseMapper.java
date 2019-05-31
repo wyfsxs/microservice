@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Mapper
-@Component
 public interface CourseMapper {
 
     @Select("select * from pe_course")
