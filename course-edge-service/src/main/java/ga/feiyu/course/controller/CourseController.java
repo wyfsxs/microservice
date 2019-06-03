@@ -1,6 +1,7 @@
 package ga.feiyu.course.controller;
 
 
+
 import com.alibaba.dubbo.config.annotation.Reference;
 import ga.feiyu.course.service.ICourseService;
 import ga.feiyu.course.service.dto.CourseDTO;
@@ -18,8 +19,8 @@ import java.util.List;
 public class CourseController {
 
 
-    @Reference
-    ICourseService iCourseService;
+    @Reference(version = "1.0.0")
+    public ICourseService iCourseService;
 
     @RequestMapping(value = "/courseDTOList", method = RequestMethod.GET)
     @ResponseBody
