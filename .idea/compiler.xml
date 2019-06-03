@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="api-getway-zuul" />
         <module name="course-dubbo-service" />
         <module name="course-dubbo-service-api" />
         <module name="course-edge-service" />
@@ -17,6 +18,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="api-getway-zuul" target="8" />
       <module name="course-dubbo-service" target="8" />
       <module name="course-dubbo-service-api" target="8" />
       <module name="course-edge-service" target="8" />
